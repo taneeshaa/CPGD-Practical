@@ -60,8 +60,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1400820a-19ae-4524-9a12-c922de98a615"",
-                    ""path"": ""<Touchscreen>/Press"",
+                    ""id"": ""6286d1e2-26c7-46ff-b796-858878ee0f5b"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
