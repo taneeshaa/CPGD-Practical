@@ -7,6 +7,9 @@ TagManager:
   - sceneTrigger
   - flowerTrigger
   - cube
+  - Gem
+  - Rocket
+  - Obstacle
   layers:
   - Default
   - TransparentFX
