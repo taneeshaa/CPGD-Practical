@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     
     public void OnJump()
     {
+        Debug.Log("Jump");
         rb.velocity = new Vector3(movement.x, 6f, movement.z);
         //anim.SetTrigger("Jump");
     }
