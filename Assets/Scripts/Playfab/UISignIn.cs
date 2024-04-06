@@ -2,28 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using PlayFab;
-using PlayFab.ClientModels;
 
-public class UICreateAccount : MonoBehaviour
+public class UISignIn : MonoBehaviour
 {
     [SerializeField] Text errorText;
     [SerializeField] Canvas canvas;
 
-
-    string username, password, emailAddress;
-
+    string username, password;
     private void OnEnable()
     {
-        UserAccountManager.OnSignInFailed.AddListener(OnCreateAccountFailed);
+        UserAccountManager.OnSignInFailure.AddListener(OnSignInFailure);
         UserAccountManager.OnSignInSuccess.AddListener(OnSignInSuccess);
     }
     private void OnDisable()
     {
-        UserAccountManager.OnSignInFailed.RemoveListener(OnCreateAccountFailed);
+        UserAccountManager.OnSignInFailed.RemoveListener(OnSignInFailure); 
         UserAccountManager.OnSignInSuccess.RemoveListener(OnSignInSuccess);
     }
-    void OnCreateAccountFailed(string error)
+    void OnSignInFailure(string error)
     {
         errorText.gameObject.SetActive(true);
         errorText.text = error;
@@ -40,13 +36,9 @@ public class UICreateAccount : MonoBehaviour
     {
         password = _password;
     }
-    public void UpdateEmailAddress(string _emailAddress)
-    {
-        emailAddress = _emailAddress;
-    }
 
-    public void CreateAccount()
+    public void SignIn()
     {
-        UserAccountManager.Instance.CreateAccount(username, password, emailAddress);
+        UserAccountManager.Instance.SignIn(username, password);
     }
 }
