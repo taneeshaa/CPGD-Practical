@@ -4,6 +4,8 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine.Events;
+using static UnityEditor.AddressableAssets.Settings.AddressableAssetProfileSettings;
+using static UnityEditor.AddressableAssets.Build.Layout.BuildLayout;
 
 public class UserAccountManager : MonoBehaviour
 {
@@ -15,10 +17,20 @@ public class UserAccountManager : MonoBehaviour
     
     public static UnityEvent<string> OnSignInFailed = new UnityEvent<string>();
 
+    public static UnityEvent<string, string> OnUserDataRetrieved = new UnityEvent<string, string>();
+
+    public DetectCollision levelData;
+    ProfileData profileData;
+    public UserProfile profile;
+
     string playfabID;
     private void Awake()
     {
         Instance = this;
+    }
+    private void Start()
+    {
+        profileData = profile.profileData;
     }
     public void CreateAccount(string username, string emailAddress, string password)
     {
@@ -104,8 +116,8 @@ public class UserAccountManager : MonoBehaviour
             },
                 response => {
                     Debug.Log($"Successful login with Android Device ID");
-                    OnSignInSuccess.Invoke();
                     playfabID = response.PlayFabId;
+                    OnSignInSuccess.Invoke();
                 },
                 error => {
                     Debug.Log($"Unsuccessful login with Android Device ID: {error.ErrorMessage}");
@@ -123,8 +135,8 @@ public class UserAccountManager : MonoBehaviour
             },
                 response => {
                     Debug.Log($"Successful login with IOS Device ID");
-                    OnSignInSuccess.Invoke();
                     playfabID = response.PlayFabId;
+                    OnSignInSuccess.Invoke();
                 },
                 error => {
                     Debug.Log($"Unsuccessful login with IOS Device ID: {error.ErrorMessage}");
@@ -132,7 +144,13 @@ public class UserAccountManager : MonoBehaviour
                 });
         } else if (!string.IsNullOrEmpty(custom_id))
         {
-            Debug.Log($"Logging in with IOS Device ID");
+            Debug.Log($"Logging in with Custom Device ID");
+
+            //set user data
+            //profileData.rocketCount = levelData.rocketCount;
+            //profileData.gemCount = levelData.gemCount;
+            //profileData.level = 1;
+
             PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
             {
                 CustomId = custom_id,
@@ -141,8 +159,8 @@ public class UserAccountManager : MonoBehaviour
             },
                 response => {
                     Debug.Log($"Successful login with Custom Device ID");
-                    OnSignInSuccess.Invoke();
                     playfabID = response.PlayFabId;
+                    OnSignInSuccess.Invoke();
                 },
                 error => {
                     Debug.Log($"Unsuccessful login with Custom Device ID: {error.ErrorMessage}");
@@ -151,21 +169,44 @@ public class UserAccountManager : MonoBehaviour
         }
     }
 
-    void GetUserData(string key)
+    public void GetUserData(string key)
     {
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest() {
-
-        }, 
-        response => { 
-
-        }, 
-        error => {
-
-        });
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest()
+        {
+            PlayFabId = playfabID,
+            Keys = new List<string>()
+            {
+                key
+            }
+        },
+        response =>
+        {
+            Debug.Log("successful getuserdata");
+            if (response.Data.ContainsKey(key)) OnUserDataRetrieved.Invoke(key, response.Data[key].Value);
+            else OnUserDataRetrieved.Invoke(key, null);
+        },
+        error =>
+        {
+            Debug.Log($"unsuccessful getuserdata: {error.ErrorMessage}");
+        }) ;
     }
 
-    void SetUserData()
+    public void SetUserData(string key, string value)
     {
-
+        PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest()
+        {
+            Data = new Dictionary<string, string>()
+            {
+                { key, value }
+            }
+        },
+        response =>
+        {
+            Debug.Log("successful setuserdata");
+        },
+        error =>
+        {
+            Debug.Log($"unsuccessful setuserdata: {error.ErrorMessage}");
+        });
     }
 }

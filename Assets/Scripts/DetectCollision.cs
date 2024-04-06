@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +10,12 @@ public class DetectCollision : MonoBehaviour
     public int gemCount = 0;
     public int rocketCount = 0;
     public int lives = 5;
-    public RocketSpawner spawner;
+    [SerializeField] RocketSpawner spawner;
+
+    [SerializeField] TextMeshProUGUI livesText;
+    [SerializeField] TextMeshProUGUI gemText;
+    [SerializeField] TextMeshProUGUI rocketText;
+   
 
     // Update is called once per frame
     void Update()
@@ -24,16 +30,16 @@ public class DetectCollision : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("collision");
         if (other.gameObject.CompareTag("Rocket"))
-        {
-            Debug.Log("Rocket encountered");
+        {            
             rocketCount++;
+            rocketText.text = "Rockets: " + rocketCount.ToString();
             lives--;
         }
         if(other.gameObject.CompareTag("Gem"))
         {
             gemCount++;
+            gemText.text = "Gems: " + gemCount.ToString();
             Destroy(other.gameObject);
             Debug.Log("Gem Count: "+ gemCount);
         }
