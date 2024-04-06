@@ -6,13 +6,21 @@ using UnityEngine.SceneManagement;
 
 public class DetectCollision : MonoBehaviour
 {
-    public int gemCount = 0; 
+    public int gemCount = 0;
+    public int rocketCount = 0;
+    public int lives = 5;
     public RocketSpawner spawner;
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(lives <= 0)
+        {
+            RestartLevel();
+            gemCount = 0;
+            rocketCount = 0;
+            lives = 5;
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -20,10 +28,8 @@ public class DetectCollision : MonoBehaviour
         if (other.gameObject.CompareTag("Rocket"))
         {
             Debug.Log("Rocket encountered");
-            spawner.enabled = false;
-            Destroy(gameObject);
-            gemCount = 0;
-            RestartLevel();
+            rocketCount++;
+            lives--;
         }
         if(other.gameObject.CompareTag("Gem"))
         {
