@@ -34,7 +34,9 @@ public class DetectCollision : MonoBehaviour
         {            
             rocketCount++;
             rocketText.text = "Rockets: " + rocketCount.ToString();
+            Destroy(other.gameObject);
             lives--;
+            livesText.text = "Lives: " + lives;
         }
         if(other.gameObject.CompareTag("Gem"))
         {
