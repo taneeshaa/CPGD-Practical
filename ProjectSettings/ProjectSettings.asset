@@ -955,11 +955,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: e80165e5-512e-4b76-9d65-c30c4c869282
+  cloudProjectId: c1b99b4f-57ff-4b5b-8f22-a93368efa7a3
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: CPGD
-  organizationId: taneeshakalra
+  projectName: MultiplayerDemo
+  organizationId: bakshish-singh
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
